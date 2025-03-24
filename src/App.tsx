@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 const Container = styled.div`
@@ -10,20 +10,35 @@ const Container = styled.div`
   padding: 0;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Page = styled(motion.div)`
   width: 100%;
-  height: 100vh;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
   padding: 2rem;
-  position: absolute;
-  top: 0;
-  left: 0;
+  padding-top: 100px; // 为顶部指示器留出空间
+  padding-bottom: 60px; // 为底部备案信息留出空间
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -44,12 +59,13 @@ const Text = styled(motion.p)`
 
 const AppGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   width: 100%;
   max-width: 1200px;
   padding: 2rem;
   margin-top: 2rem;
+  margin-bottom: 2rem; // 添加底部间距
 `;
 
 const AppSlider = styled.div`
@@ -106,13 +122,17 @@ const FloatingShape = styled(motion.div)`
 // 添加时间线样式组件
 const Timeline = styled.div`
   position: fixed;
-  top: 30px; // 从底部改为顶部
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: row;
   gap: 12px;
-  z-index: 10;
+  z-index: 100; // 提高层级确保始终显示在顶部
+  background: rgba(0, 0, 0, 0.2); // 添加半透明背景
+  padding: 10px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
 `;
 
 // 修改 TimelineItem 样式，添加 section 名称
@@ -287,85 +307,28 @@ const apps: AppInfo[] = [
 
 // 应用展示组件
 const AppShowcase = () => {
-  const itemsPerPage = 9;
-  const [currentAppPage, setCurrentAppPage] = useState(0);
-  const totalPages = Math.ceil(apps.length / itemsPerPage);
-
-  const startIndex = currentAppPage * itemsPerPage;
-  const visibleApps = apps.slice(startIndex, startIndex + itemsPerPage);
-
-  const handlePrev = () => {
-    if (currentAppPage > 0) {
-      setCurrentAppPage((prev) => prev - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentAppPage < totalPages - 1) {
-      setCurrentAppPage((prev) => prev + 1);
-    }
-  };
-
   return (
     <AppSlider>
-      {totalPages > 1 && (
-        <PrevButton
-          onClick={handlePrev}
-          disabled={currentAppPage === 0}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          &lt;
-        </PrevButton>
-      )}
-
-      <AnimatePresence mode="wait">
-        <AppGrid
-          key={currentAppPage}
-          initial={{ x: '100%', opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: '-100%', opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {visibleApps.map((app) => (
-            <AppItem
-              key={app.id}
-              onClick={() => window.open(app.storeUrl, '_blank')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <AppName>{app.name}</AppName>
-              <AppDescription>{app.description}</AppDescription>
-              <AppPlatform>
-                {app.platform === 'Both' ? 'iOS & Android' : app.platform}
-              </AppPlatform>
-            </AppItem>
-          ))}
-        </AppGrid>
-      </AnimatePresence>
-
-      {totalPages > 1 && (
-        <NextButton
-          onClick={handleNext}
-          disabled={currentAppPage >= totalPages - 1}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          &gt;
-        </NextButton>
-      )}
-
-      {totalPages > 1 && (
-        <PaginationIndicator>
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <PageIndicator
-              key={index}
-              active={currentAppPage === index}
-              onClick={() => setCurrentAppPage(index)}
-            />
-          ))}
-        </PaginationIndicator>
-      )}
+      <AppGrid
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {apps.map((app) => (
+          <AppItem
+            key={app.id}
+            onClick={() => window.open(app.storeUrl, '_blank')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <AppName>{app.name}</AppName>
+            <AppDescription>{app.description}</AppDescription>
+            <AppPlatform>
+              {app.platform === 'Both' ? 'iOS & Android' : app.platform}
+            </AppPlatform>
+          </AppItem>
+        ))}
+      </AppGrid>
     </AppSlider>
   );
 };
@@ -456,31 +419,20 @@ const pages = [
 // 添加备案信息组件
 const Footer = styled.div`
   position: fixed;
-  bottom: 15px;
+  bottom: 0;
   left: 0;
   width: 100%;
   text-align: center;
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.8rem;
   z-index: 10;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 `;
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(0);
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (e.deltaY > 0 && currentPage < pages.length - 1) {
-        setCurrentPage((prev) => prev + 1);
-      } else if (e.deltaY < 0 && currentPage > 0) {
-        setCurrentPage((prev) => prev - 1);
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [currentPage]);
 
   return (
     <Container>
@@ -518,9 +470,10 @@ const App = () => {
       <AnimatePresence mode="wait">
         <Page
           key={currentPage}
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '-100%' }}
+          data-page
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
           <Title>{pages[currentPage].title}</Title>
@@ -535,7 +488,7 @@ const App = () => {
       <Timeline>
         {pages.map((page, index) => (
           <TimelineItem
-            key={`page-${index}`}
+            key={page.id}
             active={currentPage === index}
             onClick={() => setCurrentPage(index)}
           >
@@ -547,7 +500,6 @@ const App = () => {
         ))}
       </Timeline>
 
-      {/* 添加备案信息 */}
       <Footer>© 2023 版权所有 | 粤ICP备XXXXXXXX号</Footer>
     </Container>
   );
