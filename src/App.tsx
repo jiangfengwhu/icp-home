@@ -23,7 +23,7 @@ const Page = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 2rem;
+  padding: 2rem 1rem;
   padding-top: 120px; // 为顶部指示器留出空间
   padding-bottom: 60px; // 为底部备案信息留出空间
   overflow-y: auto;
@@ -48,6 +48,14 @@ const Title = styled(motion.h1)`
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-weight: 700;
   letter-spacing: -0.03em;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
 `;
 
 const Text = styled(motion.p)`
@@ -61,13 +69,19 @@ const Text = styled(motion.p)`
 
 const AppGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
   width: 100%;
   max-width: 1300px;
-  padding: 2rem;
+  padding: 1rem;
   margin-top: 2rem;
   margin-bottom: 3rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // 移动端单列显示
+    padding: 0.5rem;
+    gap: 1.5rem;
+  }
 `;
 
 const AppSlider = styled.div`
@@ -87,6 +101,10 @@ const AppItem = styled(motion.div)`
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
+  
+  @media (max-width: 480px) {
+    padding: 1.8rem 1.5rem;
+  }
   
   &:hover {
     background: rgba(255, 255, 255, 0.25);
@@ -179,6 +197,11 @@ const Timeline = styled.div`
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  @media (max-width: 480px) {
+    padding: 10px 16px;
+    gap: 10px;
+  }
 `;
 
 // 修改 TimelineItem 样式，添加 section 名称
@@ -583,10 +606,13 @@ const AboutCardsContainer = styled.div`
   max-width: 1200px;
   width: 100%;
   margin-top: 40px;
+  padding: 0 1rem;
   
   @media (max-width: 768px) {
     flex-direction: column;
-  },
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
 `;
 
 const AboutCard = styled.div`
@@ -605,6 +631,10 @@ const AvatarCard = styled(AboutCard)`
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
 `;
 
 const Avatar = styled.div`
@@ -642,6 +672,10 @@ const AvatarTitle = styled.p`
 
 const AboutInfoCard = styled(AboutCard)`
   flex: 2;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
 `;
 
 const SocialCard = styled(AboutCard)`
@@ -649,6 +683,10 @@ const SocialCard = styled(AboutCard)`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
 `;
 
 // 关于我组件
@@ -790,6 +828,11 @@ const Footer = styled.div`
   backdrop-filter: blur(10px);
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  
+  @media (max-width: 480px) {
+    padding: 10px;
+    font-size: 0.7rem;
+  }
 `;
 
 const App = () => {
