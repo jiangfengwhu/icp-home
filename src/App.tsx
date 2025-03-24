@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import './App.css';
+import avatar from '../assets/avatar.jpeg';
 
 const Container = styled.div`
   max-width: 100%;
@@ -28,17 +29,16 @@ const Page = styled(motion.div)`
   overflow-y: auto;
   
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 0;
+    display: none;
   }
   
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    display: none;
   }
   
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
+    display: none;
   }
 `;
 
@@ -190,7 +190,7 @@ const TimelineItem = styled.div<{ active: boolean }>`
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 5px 10px;
-  border-radius: 20px;
+  border-radius: 12px;
   background: ${(props) => (props.active ? 'rgba(255, 255, 255, 0.15)' : 'transparent')};
   
   &:hover {
@@ -209,59 +209,6 @@ const TimelineDot = styled.div<{ active: boolean }>`
 const TimelineLabel = styled.span<{ active: boolean }>`
   font-size: 0.8rem;
   color: ${(props) => (props.active ? '#ffffff' : 'rgba(255, 255, 255, 0.6)')};
-`;
-
-// 添加导航按钮
-const NavButton = styled(motion.button)`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 10;
-  color: white;
-  font-size: 24px;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-`;
-
-const PrevButton = styled(NavButton)`
-  left: -25px;
-`;
-
-const NextButton = styled(NavButton)`
-  right: -25px;
-`;
-
-// 添加分页指示器
-const PaginationIndicator = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 1rem;
-`;
-
-const PageIndicator = styled.div<{ active: boolean }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: ${(props) => (props.active ? '#ffffff' : 'rgba(255, 255, 255, 0.3)')};
-  transition: all 0.3s ease;
 `;
 
 interface AppInfo {
@@ -710,9 +657,9 @@ const AboutMe = () => {
     <AboutCardsContainer>
       <AvatarCard>
         <Avatar>
-          <img src="/avatar-placeholder.jpg" alt="个人头像" />
+          <img src={avatar} alt="个人头像" />
         </Avatar>
-        <AvatarName>你的名字</AvatarName>
+        <AvatarName>jiangfeng</AvatarName>
         <AvatarTitle>前端开发工程师</AvatarTitle>
       </AvatarCard>
 
@@ -734,7 +681,7 @@ const AboutMe = () => {
       <SocialCard>
         <SocialLinks>
           <SocialLink
-            href="https://github.com/yourusername"
+            href="https://github.com/jiangfengwhu"
             target="_blank"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -759,7 +706,7 @@ const AboutMe = () => {
           </SocialLink>
 
           <SocialLink
-            href="https://twitter.com/yourusername"
+            href="https://x.com/jiangfengwhu202"
             target="_blank"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
