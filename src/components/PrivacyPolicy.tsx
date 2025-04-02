@@ -19,7 +19,7 @@ const Page = styled(motion.div)`
   align-items: center;
   text-align: center;
   padding: 2rem 1rem;
-  padding-top: 80px;
+  padding-top: 120px;
   padding-bottom: 60px;
 `;
 
